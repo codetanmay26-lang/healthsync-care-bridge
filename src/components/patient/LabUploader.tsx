@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +15,7 @@ interface LabReport {
 }
 
 export function LabUploader() {
+  const { toast } = useToast();
   const [dragActive, setDragActive] = useState(false);
   const [uploadedReports] = useState<LabReport[]>([
     {
@@ -54,6 +56,13 @@ export function LabUploader() {
 
   const handleFileUpload = (file: File) => {
     console.log('Uploading file:', file.name);
+    
+    // Show success toast
+    toast({
+      title: "File uploaded successfully",
+      description: `${file.name} has been uploaded and will be analyzed by AI.`,
+    });
+    
     // In a real app, this would upload to backend and trigger AI analysis
   };
 

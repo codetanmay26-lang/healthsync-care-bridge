@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Clock, Pill, CheckCircle, AlertTriangle } from 'lucide-react';
@@ -9,6 +10,7 @@ interface MedicationTrackerProps {
 }
 
 export function MedicationTracker({ medications }: MedicationTrackerProps) {
+  const { toast } = useToast();
   const getStatusColor = (adherenceRate: number) => {
     if (adherenceRate >= 90) return 'default';
     if (adherenceRate >= 70) return 'secondary';
@@ -24,6 +26,12 @@ export function MedicationTracker({ medications }: MedicationTrackerProps) {
   const handleTakeMedication = (medicationId: string) => {
     // In a real app, this would update the backend
     console.log('Taking medication:', medicationId);
+    
+    // Show success toast
+    toast({
+      title: "Medication marked as taken",
+      description: "Your medication adherence has been updated.",
+    });
   };
 
   return (

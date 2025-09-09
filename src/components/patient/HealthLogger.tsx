@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +17,7 @@ interface HealthEntry {
 }
 
 export function HealthLogger() {
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<'log' | 'history'>('log');
   const [bloodPressure, setBloodPressure] = useState({ systolic: '', diastolic: '' });
   const [temperature, setTemperature] = useState('');
@@ -59,6 +61,12 @@ export function HealthLogger() {
     }
     
     console.log('Logging health data:', { type, value });
+    
+    // Show success toast
+    toast({
+      title: "Health data logged",
+      description: `Successfully recorded ${type.replace('_', ' ')}: ${value}`,
+    });
   };
 
   const getEntryIcon = (type: string) => {

@@ -7,6 +7,7 @@ import { MedicationTracker } from '@/components/patient/MedicationTracker';
 import { HealthLogger } from '@/components/patient/HealthLogger';
 import { LabUploader } from '@/components/patient/LabUploader';
 import { EmergencyContact } from '@/components/patient/EmergencyContact';
+import { VitalsMonitor } from '@/components/patient/VitalsMonitor';
 import { 
   Clock, 
   Heart, 
@@ -123,15 +124,16 @@ export default function PatientPortal() {
         </Card>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid gap-6 lg:grid-cols-2">
           {/* Left Column */}
           <div className="space-y-6">
+            <VitalsMonitor />
             <MedicationTracker medications={upcomingMeds} />
-            <HealthLogger />
           </div>
 
           {/* Right Column */}
           <div className="space-y-6">
+            <HealthLogger />
             <LabUploader />
             
             {/* Recent Activities */}

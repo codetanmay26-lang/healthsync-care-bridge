@@ -1,6 +1,7 @@
 import { BarChart3, Users, Activity, TrendingUp, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { StatCard } from '@/components/dashboard/StatCard';
+import { SystemHealth } from '@/components/dashboard/SystemHealth';
 import { mockPatients, mockAlerts, mockMedications } from '@/data/mockData';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -61,139 +62,140 @@ export function Analytics() {
       </div>
 
       {/* Dashboard Grid */}
-      <div className="grid gap-6 lg:grid-cols-2">
-        {/* Patient Status Distribution */}
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>Patient Status Distribution</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {['stable', 'monitoring', 'critical'].map((status) => {
-              const count = mockPatients.filter(p => p.status === status).length;
-              const percentage = Math.round((count / totalPatients) * 100);
-              const getStatusColor = (status: string) => {
-                switch (status) {
-                  case 'critical':
-                    return 'bg-critical';
-                  case 'monitoring':
-                    return 'bg-warning';
-                  case 'stable':
-                    return 'bg-success';
-                  default:
-                    return 'bg-muted';
-                }
-              };
-              
-              return (
-                <div key={status} className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-3 h-3 rounded-full ${getStatusColor(status)}`} />
-                    <span className="capitalize font-medium">{status}</span>
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Left Side - 2 columns */}
+        <div className="lg:col-span-2 grid gap-6 lg:grid-cols-2">
+          {/* Patient Status Distribution */}
+          <Card className="shadow-card">
+            <CardHeader>
+              <CardTitle>Patient Status Distribution</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {['stable', 'monitoring', 'critical'].map((status) => {
+                const count = mockPatients.filter(p => p.status === status).length;
+                const percentage = Math.round((count / totalPatients) * 100);
+                const getStatusColor = (status: string) => {
+                  switch (status) {
+                    case 'critical':
+                      return 'bg-critical';
+                    case 'monitoring':
+                      return 'bg-warning';
+                    case 'stable':
+                      return 'bg-success';
+                    default:
+                      return 'bg-muted';
+                  }
+                };
+                
+                return (
+                  <div key={status} className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <div className={`w-3 h-3 rounded-full ${getStatusColor(status)}`} />
+                      <span className="capitalize font-medium">{status}</span>
+                    </div>
+                    <div className="flex items-center space-x-4">
+                      <Progress value={percentage} className="w-24" />
+                      <span className="text-sm font-medium w-12">{count}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-4">
-                    <Progress value={percentage} className="w-24" />
-                    <span className="text-sm font-medium w-12">{count}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </CardContent>
-        </Card>
+                );
+              })}
+            </CardContent>
+          </Card>
 
-        {/* Medication Adherence Trends */}
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>Medication Adherence Trends</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {mockMedications.map((medication, index) => (
-                <div key={medication.id} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">{medication.name}</p>
-                    <p className="text-sm text-muted-foreground">{medication.dosage}</p>
+          {/* Medication Adherence Trends */}
+          <Card className="shadow-card">
+            <CardHeader>
+              <CardTitle>Medication Adherence Trends</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {mockMedications.map((medication, index) => (
+                  <div key={medication.id} className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium">{medication.name}</p>
+                      <p className="text-sm text-muted-foreground">{medication.dosage}</p>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Progress value={medication.adherenceRate} className="w-20" />
+                      <span className="text-sm font-medium w-12">
+                        {medication.adherenceRate}%
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <Progress value={medication.adherenceRate} className="w-20" />
-                    <span className="text-sm font-medium w-12">
-                      {medication.adherenceRate}%
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Alert Response Analysis */}
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>Alert Response Analysis</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {mockAlerts.map((alert) => (
-                <div key={alert.id} className="flex items-center justify-between p-3 border rounded-lg">
-                  <div className="flex-1">
-                    <p className="font-medium text-sm">{alert.title}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {new Date(alert.timestamp).toLocaleString()}
-                    </p>
+          {/* Alert Response Analysis */}
+          <Card className="shadow-card lg:col-span-2">
+            <CardHeader>
+              <CardTitle>Alert Response Analysis</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {mockAlerts.map((alert) => (
+                  <div key={alert.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">{alert.title}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(alert.timestamp).toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Badge 
+                        variant={alert.severity === 'critical' ? 'destructive' : 
+                                alert.severity === 'warning' ? 'secondary' : 'default'}
+                      >
+                        {alert.severity}
+                      </Badge>
+                      {alert.acknowledged ? (
+                        <Badge variant="outline">Resolved</Badge>
+                      ) : (
+                        <Badge variant="destructive">Pending</Badge>
+                      )}
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Badge 
-                      variant={alert.severity === 'critical' ? 'destructive' : 
-                              alert.severity === 'warning' ? 'secondary' : 'default'}
-                    >
-                      {alert.severity}
-                    </Badge>
-                    {alert.acknowledged ? (
-                      <Badge variant="outline">Resolved</Badge>
-                    ) : (
-                      <Badge variant="destructive">Pending</Badge>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-        {/* System Performance */}
-        <Card className="shadow-card">
-          <CardHeader>
-            <CardTitle>System Performance Metrics</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="font-medium">Cold-Chain Compliance</span>
-              <div className="flex items-center space-x-2">
-                <Progress value={98} className="w-24" />
-                <span className="text-sm font-medium">98%</span>
+        {/* Right Side - System Health */}
+        <div className="space-y-6">
+          <SystemHealth />
+          
+          {/* System Performance */}
+          <Card className="shadow-card">
+            <CardHeader>
+              <CardTitle>Performance Metrics</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <span className="font-medium">Cold-Chain Compliance</span>
+                <div className="flex items-center space-x-2">
+                  <Progress value={98} className="w-24" />
+                  <span className="text-sm font-medium">98%</span>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="font-medium">IoT Device Uptime</span>
-              <div className="flex items-center space-x-2">
-                <Progress value={99.5} className="w-24" />
-                <span className="text-sm font-medium">99.5%</span>
+              <div className="flex items-center justify-between">
+                <span className="font-medium">IoT Device Uptime</span>
+                <div className="flex items-center space-x-2">
+                  <Progress value={99.5} className="w-24" />
+                  <span className="text-sm font-medium">99.5%</span>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="font-medium">AI Model Accuracy</span>
-              <div className="flex items-center space-x-2">
-                <Progress value={87} className="w-24" />
-                <span className="text-sm font-medium">87%</span>
+              <div className="flex items-center justify-between">
+                <span className="font-medium">Emergency Response Time</span>
+                <div className="flex items-center space-x-2">
+                  <span className="text-sm font-medium">Avg: 4.2 min</span>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="font-medium">Emergency Response Time</span>
-              <div className="flex items-center space-x-2">
-                <span className="text-sm font-medium">Avg: 4.2 min</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
